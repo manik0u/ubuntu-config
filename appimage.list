@@ -1,0 +1,11 @@
+## Lister ici les packages AppImage à gérer selon le schéma suivant :
+#add:URL_appimagepackagename - l'URL doit être le lien direct vers le fichier *.AppImage
+#del:URL_appimagepackagename - l'URL doit être le lien direct vers le fichier *.AppImage
+
+# Cloud
+add:https://github.com/nextcloud-releases/desktop/releases/download/v3.14.0/Nextcloud-3.14.0-x86_64.AppImage
+
+# Mots de passe
+add:https://github.com/bitwarden/clients/releases/download/desktop-v2024.8.2/Bitwarden-2024.8.2-x86_64.AppImage
+
+## Fin de liste ##
