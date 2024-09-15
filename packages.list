@@ -1,131 +1,42 @@
+## Lister ici les packages Debian (.DEB) à gérer selon le schéma suivant :
 #add:packagename
 #del:packagename
 
-# Français sur système installé en anglais
-add:aspell-fr
-add:libreoffice-langpack-fr
+# Console
+add:vim
 
-# Specifque Hardware
-add:amd-ucode-firmware
-
-# Admin SYS
-add:cockpit
-add:cockpit-bridge
-add:cockpit-networkmanager
-add:cockpit-pcp
-add:cockpit-selinux
-add:cockpit-storaged
-add:cockpit-system
-add:cockpit-ws
-
-# GNOME Apps
-add:seahorse
-add:gnome-tweaks
-add:file-roller
-add:dconf-editor
-del:gnome-boxes
-del:abrt
-
-# CLI : Console
-add:screen
-add:vim-enhanced
-
-# CLI : Contrib Fedora
-add:git
-add:koji
-add:python3-fedora
-add:libtirpc-devel
-
-# CLI : Scripting
-add:ShellCheck
-
-# CLI : Système
+# Système
 add:htop
 add:nmon
-add:glances
-del:neofetch
-del:screenfetch
-add:fastfetch
-add:inxi
-add:lm_sensors
-add:nvtop
-add:ncdu
-add:cronie
-add:mariadb
-add:nfs-utils
+add:flatpak
+add:gnome-software-plugin-flatpak
+add:gnome-software-plugin-snap
 
-# CLI : Disques
-add:nwipe
-add:sg3_utils
-
-# CLI : Réseau
+# Réseau
 add:netcat
 add:nmap
 add:iftop
 add:traceroute
-add:speedtest-cli
-add:fuse-sshfs
+del:speedtest-cli
 add:telnet
 
-# CLI : backup
-add:borgbackup
-
-# CLI : Multimedia
-add:abcde
-add:sox
-add:vorbisgain
-add:mediainfo
-add:yt-dlp
-
-# CLI : Divers
+# Divers
 add:git
-add:pv
-add:android-tools
-add:arm-image-installer
+add:displaylink-driver
+add:solaar
 
-# GUI : Multimedia
-add:pavucontrol
-del:clementine
-add:strawberry
-add:smplayer
-add:soundconverter
-add:kdenlive
-add:audacity
-add:easytag
-del:peek
-add:obs-studio
-add:obs-studio-plugin-webkitgtk
-add:obs-studio-plugin-browser
-add:mediainfo-gui
+# Internet
+## désintallation du package Firefox de base (snap) sur Ubuntu
+del:firefox
+## Installation de Firefox depuis les repos Mozilla
+add:firefox
+add:firefox-l10n-fr
+## autres
+add:epiphany-browser
 
-# GUI : Virtualisation
-add:VirtualBox
-add:virt-viewer
+# Utilitaires
+add:aspell-fr
+add:gnome-tweaks
+add:file-roller
 
-# GUI : Graphisme
-add:gimp
-add:inkscape
-del:flameshot
-
-# GUI : Reseau
-add:remmina
-del:anydesk
-add:wireshark
-
-# GUI : Internet
-add:epiphany
-add:evolution
-add:vivaldi-stable
-add:google-chrome-stable
-add:telegram-desktop
-add:discord
-
-# GUI : Utilitaires
-add:cool-retro-term
-add:guake
-
-# GUI : Sécurité
-add:keepassxc
-
-# GUI : Jeux
-add:dosbox-staging
+## Fin de liste ##
