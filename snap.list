@@ -1,0 +1,18 @@
+## Lister ici les packages Snap à gérer selon le schéma suivant :
+#add:snappackagename
+#del:snappackagename
+
+# Multimedia
+
+# Graphisme
+
+# Internet
+del:firefox
+
+# Utilitaires
+del:remmina
+
+# Mots de passe
+del:bitwarden
+
+## Fin de liste ##
