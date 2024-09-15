@@ -1,12 +1,12 @@
-# fedora-config
-My fedora config (from Fedora Workstation). Configure & Update Fedora
+# Ubuntu-config
+My ubuntu config (from Ubuntu Desktop). Configure & Update Ubuntu
 
-**Works only with Fedora Workstation with GNOME desktop environment.**
+**Works only with Ubuntu Desktop with GNOME desktop environment.**
 
 
-Ma configuration de Fedora (base Fedora Workstation). Configure & Met à jour Fedora
+Ma configuration de Ubuntu (base Ubuntu Desktop). Configure & Met à jour Ubuntu
 
-**Ne fonctionne qu'avec Fedora Workstation disposant de l'environnement de bureau GNOME.**
+**Ne fonctionne qu'avec Ubuntu Desktop disposant de l'environnement de bureau GNOME.**
 
 
 
@@ -14,7 +14,7 @@ Ma configuration de Fedora (base Fedora Workstation). Configure & Met à jour Fe
 
 ## Liste des fichiers
 
- **config-fedora.sh** : Script principal 
+ **ubuntu-config.sh** : Script principal 
  
  **gnome.list** : Fichier de paquets à ajouter ou retirer pour personnaliser GNOME (thèmes et extensions)
 
@@ -22,14 +22,18 @@ Ma configuration de Fedora (base Fedora Workstation). Configure & Met à jour Fe
 
  **flatpak.list** : Fichier de flatpak à ajouter ou retirer du système
 
+ **snap.list** : Fichier de snap à ajouter ou retirer du système
+
+ **appimage.list** : Fichier de appimage à ajouter ou retirer du système
+
 
 ## Fonctionnement
 
-Les 4 fichiers mentionnés ci-dessus doivent être dans le même dossier.
+Tous les fichiers mentionnés ci-dessus doivent être dans le même dossier.
 
 Exécuter avec les droits de super-utilisateur le scipt principal :
 
-    ./config-fedora.sh
+    ./ubuntu-config.sh
 
 Celui-ci peut être exécuté plusieurs fois de suite. Si des étapes sont déjà configurées, elles ne le seront pas à nouveau. De fait, le script peut être utilisé pour : 
 
@@ -39,28 +43,25 @@ Celui-ci peut être exécuté plusieurs fois de suite. Si des étapes sont déj�
 
 Il est possible de faire uniquement une vérification des mises à jour (listing des paquets et flatpak à mettre à jour sans appliquer de modifications) via l'option check : 
 
-    ./config-fedora.sh check
-
-
-Il est possible d'avoir un aperçu des mises à jour disponibles dans les dépôts "testing" via l'option testing : 
-
-    ./config-fedora.sh testing
-
+    ./ubuntu-config.sh check
 
 
 ## Opérations réalisées par le script
 
 Le script lancé va effectuer les opérations suivantes : 
 
- 1. Personnaliser la configuration de dnf
- 2. Mettre à jour les paquets rpm
- 3. Mettre à jour les paquets flatpak + *Proposition de redémarrage du système si nécessaire*
- 4. Ajouter les dépôts additionnels au système
- 5. Ajouter les composants utiles en provenance de RPM Fusion
- 6. Permuter certains composants du système par ceux de RPM Fusion
- 7. Ajouter tous les codec en provenance de RPM Fusion
- 8. Ajouter les composants indispensables de GNOME
- 9. Ajouter ou Supprimer les paquets rpm paramétrés dans le fichier packages.list
- 10. Ajouter ou Supprimer les paquets flatpak paramétrés dans le fichier flatpak.list 
- 11. Personnaliser la configuration du système + *Proposition de redémarrage du système si nécessaire*
+ 1. Refresh du cache apt
+ 2. Vérification de Mises à jour disponibles DEB
+ 3. Vérification de Mises à jour les paquets flatpak + *Proposition de redémarrage du système si nécessaire*
+ 4. Mise à jour du système de paquets
+ 5. Mise à jour du système SNAP
+ 6. Mise à jour du système FLATPAK
+ 7. Vérification configuration des dépôts et répertoires
+ 8. Vérification composants GNOME
+ 9. Gestion des paquets SNAP
+ 10. Gestion des paquets DEB
+ 11. Gestion des paquets FLATPAK
+ 12. Gestion des paquets APPIMAGE
+ 13. Configuration générale de GNOME
+ 14. Nettoyage + *Proposition de redémarrage du système si nécessaire*
 
