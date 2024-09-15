@@ -31,7 +31,7 @@ Ma configuration de Ubuntu (base Ubuntu Desktop). Configure & Met à jour Ubuntu
 
 Tous les fichiers mentionnés ci-dessus doivent être dans le même dossier.
 
-Exécuter avec les droits de super-utilisateur le scipt principal :
+Exécuter avec les droits de super-utilisateur le script principal :
 
     ./ubuntu-config.sh
 
