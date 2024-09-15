@@ -1,11 +1,9 @@
-# Intégration Qt dans GTK
-add:adwaita-qt5
-add:adwaita-qt6
-add:qgnomeplatform-qt5
-add:qgnomeplatform-qt6
+## Lister ici les packages Gnome à gérer selon le schéma suivant :
+#add:gnomepackagename
+#del:gnomepackagename
 
 # Extensions
 add:gnome-extensions-app
-add:gnome-shell-extension-dash-to-dock
-add:gnome-shell-extension-appindicator
 add:gnome-shell-extension-gsconnect
+
+## Fin de liste
