@@ -3,14 +3,17 @@
 #del:snappackagename
 
 # Multimedia
+add:spotify
 
 # Graphisme
 
 # Internet
 del:firefox
+del:chromium
 
 # Utilitaires
 del:remmina
+del:gnome-boxes
 
 # Mots de passe
 del:bitwarden
