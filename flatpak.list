@@ -3,18 +3,41 @@
 #del:flatpakpackagename
 
 # Multimedia
+add:de.haeckerfelix.Shortwave
 
 # Graphisme
+add:com.github.finefindus.eyedropper
 
 # Internet
-add:org.chromium.Chromium
+#add:org.chromium.Chromium
+add:io.github.ungoogled_software.ungoogled_chromium
 add:io.gitlab.librewolf-community
 
 # Utilitaires
 add:com.usebottles.bottles
 add:com.github.tchx84.Flatseal
+add:org.gnome.World.PikaBackup
+add:com.mattjakeman.ExtensionManager
+add:app.drey.Dialect
+add:io.gitlab.adhami3310.Impression
+add:net.nokyan.Resources
+add:com.github.hugolabe.Wike
+add:org.gnome.Weather
+add:org.gnome.SimpleScan
+add:org.gnome.SoundRecorder
+
+# Réseaux Sociaux
+add:dev.geopjr.Tuba
+
+# Fun
+add:io.gitlab.gregorni.Letterpress
+add:org.gnome.Snapshot
+add:com.vixalien.sticky
+add:io.gitlab.news_flash.NewsFlash
+add:com.cassidyjames.butler
 
 # Jeux
 add:com.valvesoftware.Steam
+add:org.gnome.TwentyFortyEight
 
 ## Fin de liste ##
