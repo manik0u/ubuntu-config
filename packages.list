@@ -2,22 +2,37 @@
 #add:packagename
 #del:packagename
 
+# GNOME - Logiciels et Extensions
+add:gnome-software-common
+add:gnome-software
+add:gnome-software-plugin-flatpak
+add:gnome-software-plugin-snap
+add:gnome-extensions-app
+add:gnome-shell-extension-gsconnect
+add:gnome-shell-extension-gsconnect-browsers
+add:gnome-contacts
+add:gnome-calendar
+add:gnome-tweaks
+add:gnome-backgrounds
+add:gnome-screensaver
+add:gnome-screensaver-flags
+add:gnome-boxes
+
 # Console
 add:vim
+add:nala
 
 # Système
 add:htop
 add:nmon
 add:flatpak
-add:gnome-software-plugin-flatpak
-add:gnome-software-plugin-snap
+
 
 # Réseau
 add:netcat
 add:nmap
 add:iftop
 add:traceroute
-del:speedtest-cli
 add:telnet
 
 # Divers
@@ -32,11 +47,11 @@ del:firefox
 add:firefox
 add:firefox-l10n-fr
 ## autres
-add:epiphany-browser
+#add:epiphany-browser
 
 # Utilitaires
 add:aspell-fr
-add:gnome-tweaks
 add:file-roller
+add:remmina
 
 ## Fin de liste ##
