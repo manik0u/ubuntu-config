@@ -35,79 +35,69 @@ REP_APPIMAGES="$HOME/AppImages"
 ### FONCTIONS ###
 #################
 
-check_cmd()
-{
-if [[ $? -eq 0 ]]
-then
-    	echo -e "\033[32mOK\033[0m"
-else
-    	echo -e "\033[31mERREUR\033[0m"
-fi
+function check_cmd() {
+	if [[ $? -eq 0 ]]; then
+		echo -e "\033[32mOK\033[0m"
+	else
+		echo -e "\033[31mERREUR\033[0m"
+	fi
 }
 
 
-check_repo_file()
-{
-	if [[ -e "/etc/apt/sources.list.d/$1" ]]
-	then
+function check_repo_file() {
+	if [[ -e "/etc/apt/sources.list.d/$1" ]]; then
 		return 0
 	else
 		return 1
 	fi
 }
 
-check_folder()
-{
-	if [[ -d "$1" ]]
-	then
+function check_folder() {
+	if [[ -d "$1" ]]; then
 		return 0
 	else
 		return 1
 	fi
 }
 
-check_pkg()
-{
+function check_pkg() {
 	sudo dpkg -l | grep "$1" >> "$LOGFILE" 2>&1
 }
-add_pkg()
-{
+
+function add_pkg() {
 	sudo apt install -y "$1" >> "$LOGFILE" 2>&1
 }
 
-del_pkg()
-{
+function del_pkg() {
 	sudo apt remove -y "$1" >> "$LOGFILE" 2>&1
 }
 
-check_flatpak()
-{
+function check_flatpak() {
 	sudo flatpak info "$1" >> "$LOGFILE" 2>&1
 }
-add_flatpak()
-{
+
+function add_flatpak() {
 	sudo flatpak install flathub "$1" -y  >> "$LOGFILE" 2>&1
 }
-del_flatpak()
-{
+
+function del_flatpak() {
 	sudo flatpak uninstall -y "$1" >> "$LOGFILE" 2>&1
 }
-check_snap()
-{
+
+function check_snap() {
 	sudo snap info "$1" >> "$LOGFILE" 2>&1
 }
-add_snap()
-{
+
+function add_snap() {
 	sudo snap install "$1" --classic >> "$LOGFILE" 2>&1
 }
-del_snap()
-{
+
+function del_snap() {
 	sudo snap remove "$1" >> "$LOGFILE" 2>&1
 }
-check_appimage()
-{
-		if [[ -e "$REP_APPIMAGES/$1" ]]
-	then
+
+function check_appimage() {
+	if [[ -e "$REP_APPIMAGES/$1" ]]; then
 		echo -e "\nles fichiers suivants sont déjà présents : " >> "$LOGFILE"  2>&1
 		sudo find "$REP_APPIMAGES/" -name "$1*" >> "$LOGFILE" 2>&1
 		return 0
@@ -115,62 +105,57 @@ check_appimage()
 		return 1
 	fi
 }
-add_appimage()
-{
+
+function add_appimage() {
 	sudo find "$REP_APPIMAGES/" -name "$1" -exec chmod +x {} \; >> "$LOGFILE" 2>&1
 	sudo find "$REP_APPIMAGES/" -name "$1" -exec chown -R $USER:$USER {} \; >> "$LOGFILE" 2>&1
 }
-dl_appimage()
-{
+
+function dl_appimage() {
 	sudo wget -nd -nc -q -P "$REP_APPIMAGES" "$1" >> "$LOGFILE" 2>&1
 }
-del_appimage()
-{
+
+function del_appimage() {
 	sudo find "$REP_APPIMAGES/" -name "$1" -exec rm -rfv {} \; >> "$LOGFILE" 2>&1
 }
 
-refresh_cache()
-{
+function refresh_cache() {
 	sudo apt update >> "$LOGFILE" 2>&1
 }
-upgrade_deb()
-{
+
+function upgrade_deb() {
 	sudo apt upgrade -y >> "$LOGFILE" 2>&1
 }
 
-check_updates_deb()
-{
+function check_updates_deb() {
 	sudo apt list --upgradable  >> "$LOGFILE" 2>&1
 }
 
-check_updates_flatpak()
-{
+function check_updates_flatpak() {
 	yes n | sudo flatpak update >> "$LOGFILE" 2>&1
 }
-upgrade_flatpak()
-{
+
+function upgrade_flatpak() {
 	sudo flatpak update -y >> "$LOGFILE" 2>&1
 }
-upgrade_snap()
-{
+
+function upgrade_snap() {
 	sudo snap refresh >> "$LOGFILE" 2>&1
 }
-need_reboot()
-{
-	if [[ -e "/var/run/reboot-required" ]]
-	then
+
+function need_reboot() {
+	if [[ -e "/var/run/reboot-required" ]]; then
 		return 0
 	else
 		return 1
 	fi
 }
-ask_reboot()
-{
+
+function ask_reboot() {
 	echo -n -e "\033[5;33m/\ REDÉMARRAGE NÉCESSAIRE\033[0m\033[33m : Voulez-vous redémarrer le système maintenant ? [y/N] : \033[0m"
 	read rebootuser
 	rebootuser=${rebootuser:-n}
-	if [[ ${rebootuser,,} == "y" ]]
-	then
+	if [[ ${rebootuser,,} == "y" ]]; then
 		echo -e "\n\033[0;35m Reboot via systemd ... \033[0m"
 		sleep 2
 		sudo systemctl reboot
@@ -178,27 +163,25 @@ ask_reboot()
 	fi
 }
 
-ask_maj()
-{
+function ask_maj() {
 	echo -n -e "\n\033[36mVoulez-vous lancer les MàJ maintenant ? [y/N] : \033[0m"
 	read startupdate
 	startupdate=${startupdate:-n}
 	echo ""
-	if [[ ${startupdate,,} == "y" ]]
-	then
+	if [[ ${startupdate,,} == "y" ]]; then
 		bash "$0"
 	fi
 
 }
-debut_script()
-{
+
+function debut_script() {
 	echo -e "\n##################################################################" >> "$LOGFILE"  2>&1
 	echo -e "################# DEBUT : "`date +%c`" ############" >> "$LOGFILE"  2>&1
 	echo -e "##################################################################" >> "$LOGFILE"  2>&1
 	echo " " >> "$LOGFILE"  2>&1
 }
-fin_script()
-{
+
+function fin_script() {
 	echo -e "\n##################################################################" >> "$LOGFILE"  2>&1
 	echo -e "################# FIN : "`date +%c`" ##############" >> "$LOGFILE"  2>&1
 	echo -e "##################################################################" >> "$LOGFILE"  2>&1
@@ -216,11 +199,9 @@ fin_script()
 debut_script
 
 # Verif option
-if [[ -z "$1" ]]
-then
+if [[ -z "$1" ]]; then
 	echo "OK" > /dev/null
-elif [[ "$1" == "coffee" ]] || [[ "$1" == "check" ]]
-then
+elif [[ "$1" == "coffee" ]] || [[ "$1" == "check" ]]; then
 	echo "OK" > /dev/null
 else
 	echo "Usage incorrect du script :"
@@ -231,8 +212,7 @@ else
 fi
 
 # Easter Egg
-if [[ "$1" = "coffee" ]]
-then
+if [[ "$1" = "coffee" ]]; then
 	echo "Oui ce script fait aussi le café !"
 	echo ""
 	echo '    (  )   (   )  )'
@@ -256,8 +236,7 @@ fi
 # Tester si bien Ubuntu Desktop Minimal
 echo -n "Vérification OS : "
 echo -e "\nVérification OS"  >> "$LOGFILE" 2>&1
-if ! check_pkg ubuntu-desktop-minimal
-then
+if ! check_pkg ubuntu-desktop-minimal; then
 	check_cmd
 	echo -e "\033[31mERREUR\033[0m Seul l'OS Ubuntu Destop Minimal (GNOME) est supporté !"
 	echo -e "\033[31mERREUR\033[0m Seul l'OS Ubuntu Destop Minimal (GNOME) est supporté !" >> "$LOGFILE" 2>&1
@@ -285,8 +264,7 @@ ICI=$(dirname "$0")
 
 
 ## CAS CHECK-UPDATES
-if [[ "$1" = "check" ]]
-then
+if [[ "$1" = "check" ]]; then
 	echo -n "01- - Refresh du cache : "
 	echo -e "\n01- - Refresh du cache : "  >> "$LOGFILE" 2>&1
 	refresh_cache
@@ -328,8 +306,7 @@ upgrade_flatpak
 check_cmd
 
 # Verif si reboot nécessaire
-if ! need_reboot
-then
+if ! need_reboot; then
 	ask_reboot
 fi
 
@@ -354,8 +331,7 @@ sudo add-apt-repository -y ppa:solaar-unifying/stable  >> "$LOGFILE"  2>&1
 check_cmd
 
 ## MOZILLA
-if ! check_repo_file mozilla.list
-then
+if ! check_repo_file mozilla.list; then
 	echo -n "- - - Installation Mozilla Repo : "
 	sudo apt install wget -y  >> "$LOGFILE"  2>&1
 	sudo install -d -m 0755 /etc/apt/keyrings >> "$LOGFILE"  2>&1
@@ -367,16 +343,14 @@ then
 fi
 
 ## FLATHUB
-if [[ $(flatpak remotes | grep -c flathub) -ne 1 ]]
-then
+if [[ $(flatpak remotes | grep -c flathub) -ne 1 ]]; then
 	echo -n "- - - Installation Flathub : "
 	sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo  >> "$LOGFILE"  2>&1
 	check_cmd
 fi
 
 ## DISPLAYPORT DRIVERS
-if ! check_repo_file synaptics.list
-then
+if ! check_repo_file synaptics.list; then
 	echo -n "- - - Installation Synaptics Repo (Display ports drivers): "
 	sudo wget -O  ./Téléchargements/synaptics-repository-keyring.deb https://www.synaptics.com/sites/default/files/Ubuntu/pool/stable/main/all/synaptics-repository-keyring.deb  >> "$LOGFILE"  2>&1
 	sudo apt -y install ./Téléchargements/synaptics-repository-keyring.deb  >> "$LOGFILE"  2>&1
@@ -386,8 +360,7 @@ fi
 ## Répertoires
 echo -n "- - - Vérification du répertoire APPIMAGE : "
 echo -e "\n- - - Vérification du répertoire APPIMAGE : "  >> "$LOGFILE"  2>&1
-if ! check_folder $REP_APPIMAGES
-then
+if ! check_folder $REP_APPIMAGES; then
 	echo -n "Le répertoire $REP_APPIMAGES n'existe pas! Création : "
 	echo -e "\nLe répertoire $REP_APPIMAGES n'existe pas! Création : " >> "$LOGFILE"  2>&1
 	sudo mkdir -p "$REP_APPIMAGES" && sudo chown $USER:$USER "$REP_APPIMAGES" && echo "Le répertoire $REP_APPIMAGES a été créé !" >> "$LOGFILE" 2>&1
@@ -407,22 +380,18 @@ echo "08- Vérification composants GNOME"
 echo -e "\n08- Vérification composants GNOME" >> "$LOGFILE"  2>&1
 while read -r line
 do
-	if [[ "$line" == add:* ]]
-	then
+	if [[ "$line" == add:* ]]; then
 		p=${line#add:}
-		if ! check_pkg "$p"
-		then
+		if ! check_pkg "$p"; then
 			echo -n "- - - Installation composant GNOME $p : "
 			add_pkg "$p"
 			check_cmd
 		fi
 	fi
 	
-	if [[ "$line" == del:* ]]
-	then
+	if [[ "$line" == del:* ]]; then
 		p=${line#del:}
-		if check_pkg "$p"
-		then
+		if check_pkg "$p"; then
 			echo -n "- - - Suppression composant GNOME $p : "
 			del_pkg "$p"
 			check_cmd
@@ -436,22 +405,18 @@ echo "09- Gestion des paquets SNAP"
 echo -e "\n09- Gestion des paquets SNAP" >> "$LOGFILE"  2>&1
 while read -r line
 do
-	if [[ "$line" == add:* ]]
-	then
+	if [[ "$line" == add:* ]]; then
 		p=${line#add:}
-		if ! check_snap "$p"
-		then
+		if ! check_snap "$p"; then
 			echo -n "- - - Installation snap $p : "
 			add_snap "$p"
 			check_cmd
 		fi
 	fi
 	
-	if [[ "$line" == del:* ]]
-	then
+	if [[ "$line" == del:* ]]; then
 		p=${line#del:}
-		if check_snap "$p"
-		then
+		if check_snap "$p"; then
 			echo -n "- - - Suppression snap $p : "
 			del_snap "$p"
 			check_cmd
@@ -464,22 +429,18 @@ echo "10- Gestion des paquets DEB"
 echo -e "\n10- Gestion des paquets DEB" >> "$LOGFILE"  2>&1
 while read -r line
 do
-	if [[ "$line" == add:* ]]
-	then
+	if [[ "$line" == add:* ]]; then
 		p=${line#add:}
-		if ! check_pkg "$p"
-		then
+		if ! check_pkg "$p"; then
 			echo -n "- - - Installation paquet $p : "
 			add_pkg "$p"
 			check_cmd
 		fi
 	fi
 	
-	if [[ "$line" == del:* ]]
-	then
+	if [[ "$line" == del:* ]]; then
 		p=${line#del:}
-		if check_pkg "$p"
-		then
+		if check_pkg "$p"; then
 			echo -n "- - - Suppression paquet $p : "
 			del_pkg "$p"
 			check_cmd
@@ -492,22 +453,18 @@ echo "11- Gestion des paquets FLATPAK"
 echo -e "\n11- Gestion des paquets FLATPAK"  >> "$LOGFILE"  2>&1
 while read -r line
 do
-	if [[ "$line" == add:* ]]
-	then
+	if [[ "$line" == add:* ]]; then
 		p=${line#add:}
-		if ! check_flatpak "$p"
-		then
+		if ! check_flatpak "$p"; then
 			echo -n "- - - Installation flatpak $p : "
 			add_flatpak "$p"
 			check_cmd
 		fi
 	fi
 	
-	if [[ "$line" == del:* ]]
-	then
+	if [[ "$line" == del:* ]]; then
 		p=${line#del:}
-		if check_flatpak "$p"
-		then
+		if check_flatpak "$p"; then
 			echo -n "- - - Suppression flatpak $p : "
 			del_flatpak "$p"
 			check_cmd
@@ -520,12 +477,10 @@ echo "12- Gestion des paquets APPIMAGE"
 echo -e "\n12- Gestion des paquets APPIMAGE"  >> "$LOGFILE"  2>&1
 while read -r line
 do
-	if [[ "$line" == add:* ]]
-	then
+	if [[ "$line" == add:* ]]; then
 		url=${line#add:}
 		app=${url##http*://*/}
-		if ! check_appimage "$app"
-		then
+		if ! check_appimage "$app"; then
 			echo -n "- - - Installation appimage $app via l'url $url : "
 			echo -e "\n- - - Installation appimage $app via l'url $url : "  >> "$LOGFILE"  2>&1
 			dl_appimage "$url"
@@ -534,12 +489,10 @@ do
 		fi
 	fi
 	
-	if [[ "$line" == del:* ]]
-	then
+	if [[ "$line" == del:* ]]; then
 		url=${line#del:}
 		app=${url##http*://*/}
-		if check_appimage "$app"
-		then
+		if check_appimage "$app"; then
 			echo -n "- - - Suppression appimage $app via l'url $url : "
 			echo -e "\n- - - Suppression appimage $app via l'url $url : "  >> "$LOGFILE"  2>&1
 			del_appimage "$app"
@@ -672,8 +625,7 @@ sudo apt autoremove -y >> "$LOGFILE"  2>&1
 check_cmd
 
 # Verif si reboot nécessaire
-if ! need_reboot
-then
+if ! need_reboot; then
 	ask_reboot
 fi
 
