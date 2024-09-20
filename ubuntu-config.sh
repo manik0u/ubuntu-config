@@ -630,4 +630,3 @@ if ! need_reboot; then
 fi
 
 fin_script
-#test de commit 2
