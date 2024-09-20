@@ -61,38 +61,53 @@ function check_folder() {
 }
 
 function check_pkg() {
-	sudo apt list --installed "$1" | grep "$1" >> "$LOGFILE" 2>&1
+	echo "- - Vérification paquet $1 : "  >> "$LOGFILE"  2>&1
+	sudo apt list --installed "$1" 2>/dev/null | grep "$1" >> "$LOGFILE" 2>&1
 }
 
 function add_pkg() {
-	sudo apt install -y "$1" >> "$LOGFILE" 2>&1
+	echo -n "- - - Installation paquet $1 : "
+	echo -n "- - - Installation paquet $1 : "  >> "$LOGFILE"  2>&1
+	sudo apt install "$1" -y -q=4 2>/dev/null | grep "Paramétrage" >> "$LOGFILE" 2>&1
 }
 
 function del_pkg() {
-	sudo apt remove -y "$1" >> "$LOGFILE" 2>&1
+	echo -n "- - - Suppression paquet $1 : "
+	echo -n "- - - Suppression paquet $1 : "  >> "$LOGFILE"  2>&1
+	sudo apt remove "$1" -y -q=4 2>/dev/null | grep "Suppression" >> "$LOGFILE" 2>&1
 }
 
 function check_flatpak() {
-	sudo flatpak info "$1" >> "$LOGFILE" 2>&1
+	echo "- - Vérification flatpak $1 : "  >> "$LOGFILE"  2>&1
+	sudo flatpak info "$1" 2>/dev/null | grep "ID" >> "$LOGFILE" 2>&1
 }
 
 function add_flatpak() {
+	echo -n "- - - Installation flatpak $1 : "
+	echo -n "- - - Installation flatpak $1 : "  >> "$LOGFILE"  2>&1
 	sudo flatpak install flathub "$1" -y  >> "$LOGFILE" 2>&1
 }
 
 function del_flatpak() {
+	echo -n "- - - Suppression flatpak $1 : "
+	echo -n "- - - Suppression flatpak $1 : "  >> "$LOGFILE"  2>&1
 	sudo flatpak uninstall -y "$1" >> "$LOGFILE" 2>&1
 }
 
 function check_snap() {
-	sudo snap info "$1" >> "$LOGFILE" 2>&1
+	echo "- - Vérification snap $1 : "  >> "$LOGFILE"  2>&1
+	sudo snap info "$1" | grep "installed" >> "$LOGFILE" 2>&1
 }
 
 function add_snap() {
+	echo -n "- - - Installation snap $1 : "
+	echo -n "- - - Installation snap $1 : "  >> "$LOGFILE"  2>&1
 	sudo snap install "$1" --classic >> "$LOGFILE" 2>&1
 }
 
 function del_snap() {
+	echo -n "- - - Suppression snap $1 : "
+	echo -n "- - - Suppression snap $1 : "  >> "$LOGFILE"  2>&1
 	sudo snap remove "$1" >> "$LOGFILE" 2>&1
 }
 
@@ -120,15 +135,19 @@ function del_appimage() {
 }
 
 function refresh_cache() {
-	sudo apt update >> "$LOGFILE" 2>&1
+	sudo apt update -q=2 2>/dev/null 1>> "$LOGFILE"
 }
 
 function upgrade_deb() {
-	sudo apt upgrade -y >> "$LOGFILE" 2>&1
+	sudo apt upgrade -y -q=2 2>/dev/null 1>> "$LOGFILE"
 }
 
 function check_updates_deb() {
-	sudo apt list --upgradable  >> "$LOGFILE" 2>&1
+	sudo apt list --upgradable 2>/dev/null 1>> "$LOGFILE"
+}
+
+function clean_deb() {
+	sudo apt autoremove -y -q=4 2>/dev/null | grep "Suppression" || echo "Rien à Nettoyer" >> "$LOGFILE" 2>&1
 }
 
 function check_updates_flatpak() {
@@ -327,13 +346,13 @@ check_cmd
 ## SOLAAR
 echo -n "- - - Installation repo SOLAAR : "
 echo -e "\n- - - Installation repo SOLAAR : "  >> "$LOGFILE"  2>&1
-sudo add-apt-repository -y ppa:solaar-unifying/stable  >> "$LOGFILE"  2>&1
+sudo add-apt-repository -y ppa:solaar-unifying/stable | grep "sources" >> "$LOGFILE"  2>&1
 check_cmd
 
 ## MOZILLA
 if ! check_repo_file mozilla.list; then
 	echo -n "- - - Installation Mozilla Repo : "
-	sudo apt install wget -y  >> "$LOGFILE"  2>&1
+	sudo apt install wget -y -q=2 >> "$LOGFILE"  2>&1
 	sudo install -d -m 0755 /etc/apt/keyrings >> "$LOGFILE"  2>&1
 	sudo wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | sudo tee /etc/apt/keyrings/packages.mozilla.org.asc  >> "$LOGFILE"  2>&1
 	sudo gpg -n -q --import --import-options import-show /etc/apt/keyrings/packages.mozilla.org.asc | awk '/pub/{getline; gsub(/^ +| +$/,""); if($0 == "35BAA0B33E9EB396F59CA838C0BA5CE6DC6315A3") print "\nThe key fingerprint matches ("$0").\n"; else print "\nVerification failed: the fingerprint ("$0") does not match the expected one.\n"}' >> "$LOGFILE"  2>&1
@@ -353,7 +372,7 @@ fi
 if ! check_repo_file synaptics.list; then
 	echo -n "- - - Installation Synaptics Repo (Display ports drivers): "
 	sudo wget -O  ./Téléchargements/synaptics-repository-keyring.deb https://www.synaptics.com/sites/default/files/Ubuntu/pool/stable/main/all/synaptics-repository-keyring.deb  >> "$LOGFILE"  2>&1
-	sudo apt -y install ./Téléchargements/synaptics-repository-keyring.deb  >> "$LOGFILE"  2>&1
+	sudo apt -y install ./Téléchargements/synaptics-repository-keyring.deb -q=2 >> "$LOGFILE"  2>&1
 	check_cmd
 fi
 
@@ -408,7 +427,6 @@ do
 	if [[ "$line" == add:* ]]; then
 		p=${line#add:}
 		if ! check_snap "$p"; then
-			echo -n "- - - Installation snap $p : "
 			add_snap "$p"
 			check_cmd
 		fi
@@ -417,7 +435,6 @@ do
 	if [[ "$line" == del:* ]]; then
 		p=${line#del:}
 		if check_snap "$p"; then
-			echo -n "- - - Suppression snap $p : "
 			del_snap "$p"
 			check_cmd
 		fi
@@ -432,7 +449,6 @@ do
 	if [[ "$line" == add:* ]]; then
 		p=${line#add:}
 		if ! check_pkg "$p"; then
-			echo -n "- - - Installation paquet $p : "
 			add_pkg "$p"
 			check_cmd
 		fi
@@ -441,7 +457,6 @@ do
 	if [[ "$line" == del:* ]]; then
 		p=${line#del:}
 		if check_pkg "$p"; then
-			echo -n "- - - Suppression paquet $p : "
 			del_pkg "$p"
 			check_cmd
 		fi
@@ -456,7 +471,6 @@ do
 	if [[ "$line" == add:* ]]; then
 		p=${line#add:}
 		if ! check_flatpak "$p"; then
-			echo -n "- - - Installation flatpak $p : "
 			add_flatpak "$p"
 			check_cmd
 		fi
@@ -465,7 +479,6 @@ do
 	if [[ "$line" == del:* ]]; then
 		p=${line#del:}
 		if check_flatpak "$p"; then
-			echo -n "- - - Suppression flatpak $p : "
 			del_flatpak "$p"
 			check_cmd
 		fi
@@ -621,7 +634,7 @@ echo -e "\n14- Nettoyage"  >> "$LOGFILE"  2>&1
 
 echo -n "- Nettoyage des paquets .DEB : "
 echo -e "\n- Nettoyage des paquets .DEB : "  >> "$LOGFILE"  2>&1
-sudo apt autoremove -y >> "$LOGFILE"  2>&1
+clean_deb
 check_cmd
 
 # Verif si reboot nécessaire

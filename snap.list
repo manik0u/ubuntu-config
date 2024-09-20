@@ -8,14 +8,21 @@ add:spotify
 # Graphisme
 
 # Internet
+## suppression de firefox car installation en .deb
 del:firefox
-del:chromium
 
 # Utilitaires
+## suppression de remmina car installation en .deb
 del:remmina
+## suppression de boxes car installation en .deb
 del:gnome-boxes
 
 # Mots de passe
+## suppression de bitwarden car installation en Appimage
 del:bitwarden
+
+# Utilitaire
+## suppression de gnome-calendar car installation en .deb
+del:gnome-calendar
 
 ## Fin de liste ##

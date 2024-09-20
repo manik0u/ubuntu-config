@@ -7,7 +7,7 @@ add:gnome-software-common
 add:gnome-software
 add:gnome-software-plugin-flatpak
 add:gnome-software-plugin-snap
-add:gnome-extensions-app
+add:gnome-shell-extensions
 add:gnome-shell-extension-gsconnect
 add:gnome-shell-extension-gsconnect-browsers
 add:gnome-contacts
@@ -19,17 +19,13 @@ add:gnome-screensaver-flags
 add:gnome-boxes
 
 # Console
-add:vim
 add:nala
 
 # Système
-add:htop
 add:nmon
 add:flatpak
 
-
 # Réseau
-add:netcat
 add:nmap
 add:iftop
 add:traceroute
@@ -46,8 +42,6 @@ del:firefox
 ## Installation de Firefox depuis les repos Mozilla
 add:firefox
 add:firefox-l10n-fr
-## autres
-#add:epiphany-browser
 
 # Utilitaires
 add:aspell-fr

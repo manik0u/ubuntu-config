@@ -9,7 +9,6 @@ add:de.haeckerfelix.Shortwave
 add:com.github.finefindus.eyedropper
 
 # Internet
-#add:org.chromium.Chromium
 add:io.github.ungoogled_software.ungoogled_chromium
 add:io.gitlab.librewolf-community
 
@@ -25,9 +24,6 @@ add:com.github.hugolabe.Wike
 add:org.gnome.Weather
 add:org.gnome.SimpleScan
 add:org.gnome.SoundRecorder
-
-# Réseaux Sociaux
-add:dev.geopjr.Tuba
 
 # Fun
 add:io.gitlab.gregorni.Letterpress
