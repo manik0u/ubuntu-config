@@ -61,7 +61,7 @@ function check_folder() {
 }
 
 function check_pkg() {
-	sudo dpkg -l | grep "$1" >> "$LOGFILE" 2>&1
+	sudo apt list --installed "$1" | grep "$1" >> "$LOGFILE" 2>&1
 }
 
 function add_pkg() {
@@ -375,29 +375,29 @@ fi
 refresh_cache
 
 
-### INSTALL OUTILS GNOME
-echo "08- Vérification composants GNOME"
-echo -e "\n08- Vérification composants GNOME" >> "$LOGFILE"  2>&1
-while read -r line
-do
-	if [[ "$line" == add:* ]]; then
-		p=${line#add:}
-		if ! check_pkg "$p"; then
-			echo -n "- - - Installation composant GNOME $p : "
-			add_pkg "$p"
-			check_cmd
-		fi
-	fi
+# ### INSTALL OUTILS GNOME
+# echo "08- Vérification composants GNOME"
+# echo -e "\n08- Vérification composants GNOME" >> "$LOGFILE"  2>&1
+# while read -r line
+# do
+# 	if [[ "$line" == add:* ]]; then
+# 		p=${line#add:}
+# 		if ! check_pkg "$p"; then
+# 			echo -n "- - - Installation composant GNOME $p : "
+# 			add_pkg "$p"
+# 			check_cmd
+# 		fi
+# 	fi
 	
-	if [[ "$line" == del:* ]]; then
-		p=${line#del:}
-		if check_pkg "$p"; then
-			echo -n "- - - Suppression composant GNOME $p : "
-			del_pkg "$p"
-			check_cmd
-		fi
-	fi
-done < "$ICI/gnome.list"
+# 	if [[ "$line" == del:* ]]; then
+# 		p=${line#del:}
+# 		if check_pkg "$p"; then
+# 			echo -n "- - - Suppression composant GNOME $p : "
+# 			del_pkg "$p"
+# 			check_cmd
+# 		fi
+# 	fi
+# done < "$ICI/gnome.list"
 
 
 ### INSTALL/SUPPRESSION SNAP SELON LISTE
