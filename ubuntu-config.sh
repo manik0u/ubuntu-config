@@ -515,116 +515,19 @@ do
 done < "$ICI/appimage.list"
 
 ### Vérif configuration système
-# Customisation de l'interface GNOME
 echo "13- Configuration générale de GNOME"
 echo -e "\n13- Configuration générale de GNOME"  >> "$LOGFILE"  2>&1
-
-echo -n " - Boutons de fenêtre : "
-gsettings set org.gnome.desktop.wm.preferences button-layout ":minimize,maximize,close"
-check_cmd
-
-echo -n " - Suramplification : "
-gsettings set org.gnome.desktop.sound allow-volume-above-100-percent true
-check_cmd
-
-echo -n " - Détacher les popups des fenêtres : "
-gsettings set org.gnome.mutter attach-modal-dialogs false
-check_cmd
-
-echo -n " - Affichage du calendrier dans le panneau supérieur : "
-gsettings set org.gnome.desktop.calendar show-weekdate true
-check_cmd
-
-echo -n " - Modification du format de la date et heure : "
-gsettings set org.gnome.desktop.interface clock-show-date true
-gsettings set org.gnome.desktop.interface clock-show-seconds true
-gsettings set org.gnome.desktop.interface clock-show-weekday true
-gsettings set org.gnome.desktop.interface clock-format 24h
-check_cmd
-
-echo -n " - Paramétrage Touch Pad : "
-gsettings set org.gnome.desktop.peripherals.touchpad disable-while-typing true
-gsettings set org.gnome.desktop.peripherals.touchpad click-method "areas"
-check_cmd
-
-echo -n " - Désactivation des sons système : "
-gsettings set org.gnome.desktop.wm.preferences audible-bell false
-check_cmd
-
-echo -n " - Activation du mode nuit : "
-gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled false
-check_cmd
-
-echo -n " - Epuration des fichiers temporaires et de la corbeille de plus de 30 jours : "
-gsettings set org.gnome.desktop.privacy remove-old-temp-files true
-gsettings set org.gnome.desktop.privacy remove-old-trash-files true
-gsettings set org.gnome.desktop.privacy old-files-age "30"
-check_cmd
-
-echo "Confidentialité de GNOME"
-echo -n " - Désactivation de l'envoi des rapports : "
-gsettings set org.gnome.desktop.privacy report-technical-problems false
-echo -n " - Désactivation des statistiques des logiciels : "
-gsettings set org.gnome.desktop.privacy send-software-usage-stats false
-check_cmd
-
-echo "Personnalisation de GNOME"
-echo -n " - Application du thème sombre : "
-gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
-gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark'
-check_cmd
-
-echo "Configuration Nautilus"
-echo -n " - Désactivation de l ouverture du dossier lorsqu un élément est glissé dedans : "
-gsettings set org.gnome.nautilus.preferences open-folder-on-dnd-hover false
-check_cmd
-
-echo -n " - Activation du double clic : "
-gsettings set org.gnome.nautilus.preferences click-policy 'double'
-check_cmd
-
-echo -n " - Modification de l ordre de tri : "
-gsettings set org.gtk.Settings.FileChooser sort-directories-first true
-gsettings set org.gtk.gtk4.Settings.FileChooser sort-directories-first true
-check_cmd
-
-echo "Configuration de GNOME Logiciels"
-echo -n " - Désactivation du téléchargement automatique des mises à jour : "
-gsettings set org.gnome.software download-updates false
-check_cmd
-
-echo -n " - Activation de l'affichage des logiciels propriétaires : "
-gsettings set org.gnome.software show-only-free-apps false
-check_cmd
-
-echo -n "Configuration de GNOME Text Editor : "
-gsettings set org.gnome.TextEditor highlight-current-line false
-gsettings set org.gnome.TextEditor restore-session false
-gsettings set org.gnome.TextEditor show-line-numbers true
-check_cmd
-
-# echo "Configuration de GNOME Web"
-# gsettings set org.gnome.Epiphany ask-for-default false
-# gsettings set org.gnome.Epiphany homepage-url 'about:blank'
-# gsettings set org.gnome.Epiphany start-in-incognito-mode true
-# check_cmd
-
-echo "Personnalisation de Dash-to-dock"
-# echo " - Activation de l'extension"
-# gnome-shell-extension-tool -e dash-to-dock@micxgx.gmail.com
-echo -n " - Placement en bas, fixé et masquage intelligent : "
-gsettings set org.gnome.shell.extensions.dash-to-dock dock-position "BOTTOM"
-gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed false
-gsettings set org.gnome.shell.extensions.dash-to-dock autohide-in-fullscreen true 
-check_cmd
-
-echo -n " - Correction du bug de la double lettre : "
-gsettings set org.gnome.shell.extensions.dash-to-dock disable-overview-on-startup true
-check_cmd
-
-# echo "Activation de Appindicator"
-# gnome-shell-extension-tool -e appindicatorsupport@rgcjonas.gmail.com
-
+while read -r line
+do
+	if [[ "$line" == add:* ]]; then
+		p=${line#add:}
+		if ! check_pkg "$p"; then
+			echo -n "- - - Application du paramètre GNOME - $p - : "
+			$p   >> "$LOGFILE"  2>&1
+			check_cmd
+		fi
+	fi
+done < "$ICI/gnome.list"
 echo "Personnalisation terminée."
 echo -e "\nPersonnalisation terminée."  >> "$LOGFILE"  2>&1
 
