@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
-#
+
 ####################
 ### INTRODUCTION ###
 ####################
@@ -26,7 +26,9 @@
 ### VARIABLES ###
 #################
 LOGFILE="$HOME/ubuntu-config.log"
-REP_APPIMAGES="$HOME/AppImages"
+REP_APPLICATIONS="$HOME/Applications"
+REP_APPIMAGES="$REP_APPLICATIONS/AppImages"
+REP_LOCALDEBS="$REP_APPLICATIONS/LocalDEBS"
 #####################
 ### FIN VARIABLES ###
 #####################
@@ -132,6 +134,31 @@ function dl_appimage() {
 
 function del_appimage() {
 	sudo find "$REP_APPIMAGES/" -name "$1" -exec rm -rfv {} \; >> "$LOGFILE" 2>&1
+}
+
+function check_localdeb() {
+	if [[ -e "$REP_LOCALDEBS/$1" ]]; then
+		echo -e "\nles fichiers suivants sont déjà présents : " >> "$LOGFILE"  2>&1
+		sudo find "$REP_LOCALDEBS/" -name "$1*" >> "$LOGFILE" 2>&1
+		return 0
+	else
+		return 1
+	fi
+}
+
+function add_localdeb() {
+	sudo find "$REP_LOCALDEBS/" -name "$1" -exec chown -R $USER:$USER {} \; >> "$LOGFILE" 2>&1
+	sudo apt install "$REP_LOCALDEBS/$1" -y -q=4 2>/dev/null | grep "Paramétrage" >> "$LOGFILE" 2>&1
+}
+
+function dl_localdeb() {
+	sudo wget -nd -nc -q -P "$REP_LOCALDEBS" "$1" >> "$LOGFILE" 2>&1
+}
+
+function del_localdeb() {
+	
+	sudo apt remove "$1" -y -q=4 2>/dev/null | grep "Suppression" >> "$LOGFILE" 2>&1
+	sudo find "$REP_LOCALDEBS/" -name "$1" -exec rm -rfv {} \; >> "$LOGFILE" 2>&1
 }
 
 function refresh_cache() {
@@ -377,6 +404,18 @@ if ! check_repo_file synaptics.list; then
 fi
 
 ## Répertoires
+echo -n "- - - Vérification du répertoire APPLICATIONS : "
+echo -e "\n- - - Vérification du répertoire APPLICATIONS : "  >> "$LOGFILE"  2>&1
+if ! check_folder $REP_APPLICATIONS; then
+	echo -n "Le répertoire $REP_APPLICATIONS n'existe pas! Création : "
+	echo -e "\nLe répertoire $REP_APPLICATIONS n'existe pas! Création : " >> "$LOGFILE"  2>&1
+	sudo mkdir -p "$REP_APPLICATIONS" && sudo chown $USER:$USER "$REP_APPLICATIONS" && echo "Le répertoire $REP_APPLICATIONS a été créé !" >> "$LOGFILE" 2>&1
+	check_cmd
+else 
+	echo -n "Le répertoire $REP_APPLICATIONS existe ! Rien à faire : "
+	echo -e "\nLe répertoire $REP_APPLICATIONS existe ! Rien à faire : "  >> "$LOGFILE"  2>&1
+	check_cmd
+fi
 echo -n "- - - Vérification du répertoire APPIMAGE : "
 echo -e "\n- - - Vérification du répertoire APPIMAGE : "  >> "$LOGFILE"  2>&1
 if ! check_folder $REP_APPIMAGES; then
@@ -389,35 +428,51 @@ else
 	echo -e "\nLe répertoire $REP_APPIMAGES existe ! Rien à faire : "  >> "$LOGFILE"  2>&1
 	check_cmd
 fi
+echo -n "- - - Vérification du répertoire LOCALDEBS : "
+echo -e "\n- - - Vérification du répertoire LOCALDEBS : "  >> "$LOGFILE"  2>&1
+if ! check_folder $REP_LOCALDEBS; then
+	echo -n "Le répertoire $REP_LOCALDEBS n'existe pas! Création : "
+	echo -e "\nLe répertoire $REP_LOCALDEBS n'existe pas! Création : " >> "$LOGFILE"  2>&1
+	sudo mkdir -p "$REP_LOCALDEBS" && sudo chown $USER:$USER "$REP_LOCALDEBS" && echo "Le répertoire $REP_LOCALDEBS a été créé !" >> "$LOGFILE" 2>&1
+	check_cmd
+else 
+	echo -n "Le répertoire $REP_LOCALDEBS existe ! Rien à faire : "
+	echo -e "\nLe répertoire $REP_LOCALDEBS existe ! Rien à faire : "  >> "$LOGFILE"  2>&1
+	check_cmd
+fi
 
 ## Refresh Cache
 refresh_cache
 
-
-# ### INSTALL OUTILS GNOME
-# echo "08- Vérification composants GNOME"
-# echo -e "\n08- Vérification composants GNOME" >> "$LOGFILE"  2>&1
-# while read -r line
-# do
-# 	if [[ "$line" == add:* ]]; then
-# 		p=${line#add:}
-# 		if ! check_pkg "$p"; then
-# 			echo -n "- - - Installation composant GNOME $p : "
-# 			add_pkg "$p"
-# 			check_cmd
-# 		fi
-# 	fi
+### INSTALL/SUPPRESSION DEB LOCAUX SELON LISTE
+echo "08- Gestion des paquets locaux DEB"
+echo -e "\n08 bis- Gestion des paquets locaux DEB"  >> "$LOGFILE"  2>&1
+while read -r line
+do
+	if [[ "$line" == add:* ]]; then
+		url=${line#add:}
+		app=${url##http*://*/}
+		if ! check_localdeb "$app"; then
+			echo -n "- - - Installation paquet local $app via l'url $url : "
+			echo -e "\n- - - Installation paquet local $app via l'url $url : "  >> "$LOGFILE"  2>&1
+			dl_localdeb "$url"
+			add_localdeb "$app"
+			check_cmd
+		fi
+	fi
 	
-# 	if [[ "$line" == del:* ]]; then
-# 		p=${line#del:}
-# 		if check_pkg "$p"; then
-# 			echo -n "- - - Suppression composant GNOME $p : "
-# 			del_pkg "$p"
-# 			check_cmd
-# 		fi
-# 	fi
-# done < "$ICI/gnome.list"
-
+	if [[ "$line" == del:* ]]; then
+		url=${line#del:}
+		app=${url##http*://*/}
+		package_name=$(sudo dpkg-deb --field $REP_LOCALDEBS/$app package)
+		if check_localdeb "$app"; then
+			echo -n "- - - Suppression paquet local $package_name (fichier $app) via l'url $url : "
+			echo -e "\n- - - Suppression paquet local $package_name (fichier $app) via l'url $url : "  >> "$LOGFILE"  2>&1
+			del_localdeb "$package_name"
+			check_cmd
+		fi
+	fi
+done < "$ICI/localdeb.list"
 
 ### INSTALL/SUPPRESSION SNAP SELON LISTE
 echo "09- Gestion des paquets SNAP"
@@ -462,6 +517,8 @@ do
 		fi
 	fi
 done < "$ICI/packages.list"
+#  Ajout d'un espace pour les logs
+echo -e "\n"  >> "$LOGFILE"  2>&1
 
 ### INSTALL/SUPPRESSION FLATPAK SELON LISTE
 echo "11- Gestion des paquets FLATPAK"
@@ -515,116 +572,19 @@ do
 done < "$ICI/appimage.list"
 
 ### Vérif configuration système
-# Customisation de l'interface GNOME
 echo "13- Configuration générale de GNOME"
 echo -e "\n13- Configuration générale de GNOME"  >> "$LOGFILE"  2>&1
-
-echo -n " - Boutons de fenêtre : "
-gsettings set org.gnome.desktop.wm.preferences button-layout ":minimize,maximize,close"
-check_cmd
-
-echo -n " - Suramplification : "
-gsettings set org.gnome.desktop.sound allow-volume-above-100-percent true
-check_cmd
-
-echo -n " - Détacher les popups des fenêtres : "
-gsettings set org.gnome.mutter attach-modal-dialogs false
-check_cmd
-
-echo -n " - Affichage du calendrier dans le panneau supérieur : "
-gsettings set org.gnome.desktop.calendar show-weekdate true
-check_cmd
-
-echo -n " - Modification du format de la date et heure : "
-gsettings set org.gnome.desktop.interface clock-show-date true
-gsettings set org.gnome.desktop.interface clock-show-seconds true
-gsettings set org.gnome.desktop.interface clock-show-weekday true
-gsettings set org.gnome.desktop.interface clock-format 24h
-check_cmd
-
-echo -n " - Paramétrage Touch Pad : "
-gsettings set org.gnome.desktop.peripherals.touchpad disable-while-typing true
-gsettings set org.gnome.desktop.peripherals.touchpad click-method "areas"
-check_cmd
-
-echo -n " - Désactivation des sons système : "
-gsettings set org.gnome.desktop.wm.preferences audible-bell false
-check_cmd
-
-echo -n " - Activation du mode nuit : "
-gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled false
-check_cmd
-
-echo -n " - Epuration des fichiers temporaires et de la corbeille de plus de 30 jours : "
-gsettings set org.gnome.desktop.privacy remove-old-temp-files true
-gsettings set org.gnome.desktop.privacy remove-old-trash-files true
-gsettings set org.gnome.desktop.privacy old-files-age "30"
-check_cmd
-
-echo "Confidentialité de GNOME"
-echo -n " - Désactivation de l'envoi des rapports : "
-gsettings set org.gnome.desktop.privacy report-technical-problems false
-echo -n " - Désactivation des statistiques des logiciels : "
-gsettings set org.gnome.desktop.privacy send-software-usage-stats false
-check_cmd
-
-echo "Personnalisation de GNOME"
-echo -n " - Application du thème sombre : "
-gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
-gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark'
-check_cmd
-
-echo "Configuration Nautilus"
-echo -n " - Désactivation de l ouverture du dossier lorsqu un élément est glissé dedans : "
-gsettings set org.gnome.nautilus.preferences open-folder-on-dnd-hover false
-check_cmd
-
-echo -n " - Activation du double clic : "
-gsettings set org.gnome.nautilus.preferences click-policy 'double'
-check_cmd
-
-echo -n " - Modification de l ordre de tri : "
-gsettings set org.gtk.Settings.FileChooser sort-directories-first true
-gsettings set org.gtk.gtk4.Settings.FileChooser sort-directories-first true
-check_cmd
-
-echo "Configuration de GNOME Logiciels"
-echo -n " - Désactivation du téléchargement automatique des mises à jour : "
-gsettings set org.gnome.software download-updates false
-check_cmd
-
-echo -n " - Activation de l'affichage des logiciels propriétaires : "
-gsettings set org.gnome.software show-only-free-apps false
-check_cmd
-
-echo -n "Configuration de GNOME Text Editor : "
-gsettings set org.gnome.TextEditor highlight-current-line false
-gsettings set org.gnome.TextEditor restore-session false
-gsettings set org.gnome.TextEditor show-line-numbers true
-check_cmd
-
-# echo "Configuration de GNOME Web"
-# gsettings set org.gnome.Epiphany ask-for-default false
-# gsettings set org.gnome.Epiphany homepage-url 'about:blank'
-# gsettings set org.gnome.Epiphany start-in-incognito-mode true
-# check_cmd
-
-echo "Personnalisation de Dash-to-dock"
-# echo " - Activation de l'extension"
-# gnome-shell-extension-tool -e dash-to-dock@micxgx.gmail.com
-echo -n " - Placement en bas, fixé et masquage intelligent : "
-gsettings set org.gnome.shell.extensions.dash-to-dock dock-position "BOTTOM"
-gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed false
-gsettings set org.gnome.shell.extensions.dash-to-dock autohide-in-fullscreen true 
-check_cmd
-
-echo -n " - Correction du bug de la double lettre : "
-gsettings set org.gnome.shell.extensions.dash-to-dock disable-overview-on-startup true
-check_cmd
-
-# echo "Activation de Appindicator"
-# gnome-shell-extension-tool -e appindicatorsupport@rgcjonas.gmail.com
-
+while read -r line
+do
+	if [[ "$line" == add:* ]]; then
+		p=${line#add:}
+		if ! check_pkg "$p"; then
+			echo -n "- - - Application du paramètre GNOME - $p - : "
+			$p   >> "$LOGFILE"  2>&1
+			check_cmd
+		fi
+	fi
+done < "$ICI/gnome.list"
 echo "Personnalisation terminée."
 echo -e "\nPersonnalisation terminée."  >> "$LOGFILE"  2>&1
 

@@ -1,5 +1,91 @@
-## Lister ici les packages Gnome à gérer selon le schéma suivant :
-#add:gnomepackagename
-#del:gnomepackagename
+## Lister ici les configurations Gnomes à appliquer
+# add:configuration_gnome
 
-## Fin de liste
+## Customisation de l'interface GNOME
+# Boutons de fenêtre
+add:gsettings set org.gnome.desktop.wm.preferences button-layout ":minimize,maximize,close"
+
+# Suramplification
+add:gsettings set org.gnome.desktop.sound allow-volume-above-100-percent true
+
+# Détacher les popups des fenêtres
+add:gsettings set org.gnome.mutter attach-modal-dialogs false
+
+# Affichage du calendrier dans le panneau supérieur
+add:gsettings set org.gnome.desktop.calendar show-weekdate true
+
+# Modification du format de la date et heure
+add:gsettings set org.gnome.desktop.interface clock-show-date true
+add:gsettings set org.gnome.desktop.interface clock-show-seconds true
+add:gsettings set org.gnome.desktop.interface clock-show-weekday true
+add:gsettings set org.gnome.desktop.interface clock-format 24h
+
+# Paramétrage Touch Pad
+add:gsettings set org.gnome.desktop.peripherals.touchpad disable-while-typing true
+add:gsettings set org.gnome.desktop.peripherals.touchpad click-method "areas"
+
+# Désactivation des sons système
+add:gsettings set org.gnome.desktop.wm.preferences audible-bell false
+
+# Activation du mode nuit
+add:gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled false
+
+# Epuration des fichiers temporaires et de la corbeille de plus de 30 jours
+add:gsettings set org.gnome.desktop.privacy remove-old-temp-files true
+add:gsettings set org.gnome.desktop.privacy remove-old-trash-files true
+add:gsettings set org.gnome.desktop.privacy old-files-age "30"
+
+## Confidentialité de GNOME
+# Désactivation de l'envoi des rapports
+add:gsettings set org.gnome.desktop.privacy report-technical-problems false
+# Désactivation des statistiques des logiciels
+add:gsettings set org.gnome.desktop.privacy send-software-usage-stats false
+
+## Personnalisation de GNOME
+# Application du thème sombre
+add:gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+add:gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark'
+
+## Configuration Nautilus
+# Désactivation de l ouverture du dossier lorsqu un élément est glissé dedans
+add:gsettings set org.gnome.nautilus.preferences open-folder-on-dnd-hover false
+
+# Activation du double clic
+add:gsettings set org.gnome.nautilus.preferences click-policy 'double'
+
+# Modification de l ordre de tri
+add:gsettings set org.gtk.Settings.FileChooser sort-directories-first true
+add:gsettings set org.gtk.gtk4.Settings.FileChooser sort-directories-first true
+
+## Configuration de GNOME Logiciels
+# Désactivation du téléchargement automatique des mises à jour
+add:gsettings set org.gnome.software download-updates false
+
+# Activation de l'affichage des logiciels propriétaires
+add:gsettings set org.gnome.software show-only-free-apps false
+
+## Configuration de GNOME Text Editor
+add:gsettings set org.gnome.TextEditor highlight-current-line false
+add:gsettings set org.gnome.TextEditor restore-session false
+add:gsettings set org.gnome.TextEditor show-line-numbers true
+
+## Configuration de GNOME Web
+# add:gsettings set org.gnome.Epiphany ask-for-default false
+# add:gsettings set org.gnome.Epiphany homepage-url 'about:blank'
+# add:gsettings set org.gnome.Epiphany start-in-incognito-mode true
+
+## Personnalisation de Dash-to-dock"
+# Activation de l'extension
+# add:gnome-shell-extension-tool -e dash-to-dock@micxgx.gmail.com
+# Placement en bas, fixé et masquage intelligent
+add:gsettings set org.gnome.shell.extensions.dash-to-dock dock-position "BOTTOM"
+add:gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed false
+add:gsettings set org.gnome.shell.extensions.dash-to-dock autohide-in-fullscreen true 
+
+# Correction du bug de la double lettre
+add:gsettings set org.gnome.shell.extensions.dash-to-dock disable-overview-on-startup true
+
+## Activation de Appindicator
+# add:gnome-shell-extension-tool -e appindicatorsupport@rgcjonas.gmail.com
+
+## Fin de liste ##
