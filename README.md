@@ -57,7 +57,7 @@ Le script lancé va effectuer les opérations suivantes :
  5. Mise à jour du système SNAP
  6. Mise à jour du système FLATPAK
  7. Vérification configuration des dépôts et répertoires
- 8. Vérification composants GNOME
+ 8. Gestion des paquets locaux DEB
  9. Gestion des paquets SNAP
  10. Gestion des paquets DEB
  11. Gestion des paquets FLATPAK
