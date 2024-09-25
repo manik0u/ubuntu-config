@@ -1,0 +1,11 @@
+## Lister ici les packages locaux deb à gérer selon le schéma suivant :
+#add:URL_localdebpackagename - l'URL doit être le lien direct vers le fichier *.deb
+#del:URL_localdebpackagename - l'URL doit être le lien direct vers le fichier *.deb
+
+# Cloud
+#add:
+
+# Mots de passe
+add:https://github.com/bitwarden/clients/releases/download/desktop-v2024.9.0/Bitwarden-2024.9.0-amd64.deb
+
+## Fin de liste ##

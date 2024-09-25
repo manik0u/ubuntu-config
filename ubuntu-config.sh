@@ -26,7 +26,9 @@
 ### VARIABLES ###
 #################
 LOGFILE="$HOME/ubuntu-config.log"
-REP_APPIMAGES="$HOME/AppImages"
+REP_APPLICATIONS="$HOME/Applications"
+REP_APPIMAGES="$REP_APPLICATIONS/AppImages"
+REP_LOCALDEBS="$REP_APPLICATIONS/LocalDEBS"
 #####################
 ### FIN VARIABLES ###
 #####################
@@ -132,6 +134,31 @@ function dl_appimage() {
 
 function del_appimage() {
 	sudo find "$REP_APPIMAGES/" -name "$1" -exec rm -rfv {} \; >> "$LOGFILE" 2>&1
+}
+
+function check_localdeb() {
+	if [[ -e "$REP_LOCALDEBS/$1" ]]; then
+		echo -e "\nles fichiers suivants sont déjà présents : " >> "$LOGFILE"  2>&1
+		sudo find "$REP_LOCALDEBS/" -name "$1*" >> "$LOGFILE" 2>&1
+		return 0
+	else
+		return 1
+	fi
+}
+
+function add_localdeb() {
+	sudo find "$REP_LOCALDEBS/" -name "$1" -exec chown -R $USER:$USER {} \; >> "$LOGFILE" 2>&1
+	sudo apt install "$REP_LOCALDEBS/$1" -y -q=4 2>/dev/null | grep "Paramétrage" >> "$LOGFILE" 2>&1
+}
+
+function dl_localdeb() {
+	sudo wget -nd -nc -q -P "$REP_LOCALDEBS" "$1" >> "$LOGFILE" 2>&1
+}
+
+function del_localdeb() {
+	
+	sudo apt remove "$1" -y -q=4 2>/dev/null | grep "Suppression" >> "$LOGFILE" 2>&1
+	sudo find "$REP_LOCALDEBS/" -name "$1" -exec rm -rfv {} \; >> "$LOGFILE" 2>&1
 }
 
 function refresh_cache() {
@@ -377,6 +404,18 @@ if ! check_repo_file synaptics.list; then
 fi
 
 ## Répertoires
+echo -n "- - - Vérification du répertoire APPLICATIONS : "
+echo -e "\n- - - Vérification du répertoire APPLICATIONS : "  >> "$LOGFILE"  2>&1
+if ! check_folder $REP_APPLICATIONS; then
+	echo -n "Le répertoire $REP_APPLICATIONS n'existe pas! Création : "
+	echo -e "\nLe répertoire $REP_APPLICATIONS n'existe pas! Création : " >> "$LOGFILE"  2>&1
+	sudo mkdir -p "$REP_APPLICATIONS" && sudo chown $USER:$USER "$REP_APPLICATIONS" && echo "Le répertoire $REP_APPLICATIONS a été créé !" >> "$LOGFILE" 2>&1
+	check_cmd
+else 
+	echo -n "Le répertoire $REP_APPLICATIONS existe ! Rien à faire : "
+	echo -e "\nLe répertoire $REP_APPLICATIONS existe ! Rien à faire : "  >> "$LOGFILE"  2>&1
+	check_cmd
+fi
 echo -n "- - - Vérification du répertoire APPIMAGE : "
 echo -e "\n- - - Vérification du répertoire APPIMAGE : "  >> "$LOGFILE"  2>&1
 if ! check_folder $REP_APPIMAGES; then
@@ -389,13 +428,51 @@ else
 	echo -e "\nLe répertoire $REP_APPIMAGES existe ! Rien à faire : "  >> "$LOGFILE"  2>&1
 	check_cmd
 fi
+echo -n "- - - Vérification du répertoire LOCALDEBS : "
+echo -e "\n- - - Vérification du répertoire LOCALDEBS : "  >> "$LOGFILE"  2>&1
+if ! check_folder $REP_LOCALDEBS; then
+	echo -n "Le répertoire $REP_LOCALDEBS n'existe pas! Création : "
+	echo -e "\nLe répertoire $REP_LOCALDEBS n'existe pas! Création : " >> "$LOGFILE"  2>&1
+	sudo mkdir -p "$REP_LOCALDEBS" && sudo chown $USER:$USER "$REP_LOCALDEBS" && echo "Le répertoire $REP_LOCALDEBS a été créé !" >> "$LOGFILE" 2>&1
+	check_cmd
+else 
+	echo -n "Le répertoire $REP_LOCALDEBS existe ! Rien à faire : "
+	echo -e "\nLe répertoire $REP_LOCALDEBS existe ! Rien à faire : "  >> "$LOGFILE"  2>&1
+	check_cmd
+fi
 
 ## Refresh Cache
 refresh_cache
 
-### Catégorie non utilisée
-echo "08- Catégorie non utilisée"
-echo -e "\n08- Catégorie non utilisée" >> "$LOGFILE"  2>&1
+### INSTALL/SUPPRESSION DEB LOCAUX SELON LISTE
+echo "08- Gestion des paquets locaux DEB"
+echo -e "\n08 bis- Gestion des paquets locaux DEB"  >> "$LOGFILE"  2>&1
+while read -r line
+do
+	if [[ "$line" == add:* ]]; then
+		url=${line#add:}
+		app=${url##http*://*/}
+		if ! check_localdeb "$app"; then
+			echo -n "- - - Installation paquet local $app via l'url $url : "
+			echo -e "\n- - - Installation paquet local $app via l'url $url : "  >> "$LOGFILE"  2>&1
+			dl_localdeb "$url"
+			add_localdeb "$app"
+			check_cmd
+		fi
+	fi
+	
+	if [[ "$line" == del:* ]]; then
+		url=${line#del:}
+		app=${url##http*://*/}
+		package_name=$(sudo dpkg-deb --field $REP_LOCALDEBS/$app package)
+		if check_localdeb "$app"; then
+			echo -n "- - - Suppression paquet local $package_name (fichier $app) via l'url $url : "
+			echo -e "\n- - - Suppression paquet local $package_name (fichier $app) via l'url $url : "  >> "$LOGFILE"  2>&1
+			del_localdeb "$package_name"
+			check_cmd
+		fi
+	fi
+done < "$ICI/localdeb.list"
 
 ### INSTALL/SUPPRESSION SNAP SELON LISTE
 echo "09- Gestion des paquets SNAP"
@@ -440,6 +517,8 @@ do
 		fi
 	fi
 done < "$ICI/packages.list"
+#  Ajout d'un espace pour les logs
+echo -e "\n"  >> "$LOGFILE"  2>&1
 
 ### INSTALL/SUPPRESSION FLATPAK SELON LISTE
 echo "11- Gestion des paquets FLATPAK"

@@ -5,7 +5,4 @@
 # Cloud
 add:https://github.com/nextcloud-releases/desktop/releases/download/v3.13.4/Nextcloud-3.13.4-x86_64.AppImage
 
-# Mots de passe
-add:https://github.com/bitwarden/clients/releases/download/desktop-v2024.9.0/Bitwarden-2024.9.0-x86_64.AppImage
-
 ## Fin de liste ##
