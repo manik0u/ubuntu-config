@@ -24,6 +24,7 @@ add:nala
 # Système
 add:nmon
 add:flatpak
+add:preload
 
 # Réseau
 add:nmap
