@@ -5,7 +5,17 @@
 # Cloud
 #add:
 
+# ProtonMail
+add:https://proton.me/download/mail/linux/ProtonMail-desktop-beta.deb
+
 # Mots de passe
-add:https://github.com/bitwarden/clients/releases/download/desktop-v2024.9.0/Bitwarden-2024.9.0-amd64.deb
+del:https://github.com/bitwarden/clients/releases/download/desktop-v2024.9.0/Bitwarden-2024.9.0-amd64.deb
+add:https://github.com/bitwarden/clients/releases/download/desktop-v2024.11.2/Bitwarden-2024.11.2-amd64.deb
+
+# Jeux
+#del:https://cdn.akamai.steamstatic.com/client/installer/steam.deb
+
+# Multimedia
+#del:https://github.com/MediaBrowser/emby-theater-electron/releases/download/3.0.21/emby-theater-deb_3.0.21_amd64.deb
 
 ## Fin de liste ##
