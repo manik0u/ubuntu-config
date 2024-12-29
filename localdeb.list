@@ -9,8 +9,8 @@
 add:https://proton.me/download/mail/linux/ProtonMail-desktop-beta.deb
 
 # Mots de passe
-del:https://github.com/bitwarden/clients/releases/download/desktop-v2024.9.0/Bitwarden-2024.9.0-amd64.deb
-del:https://github.com/bitwarden/clients/releases/download/desktop-v2024.11.2/Bitwarden-2024.11.2-amd64.deb
+#del:https://github.com/bitwarden/clients/releases/download/desktop-v2024.9.0/Bitwarden-2024.9.0-amd64.deb
+#del:https://github.com/bitwarden/clients/releases/download/desktop-v2024.11.2/Bitwarden-2024.11.2-amd64.deb
 add:https://github.com/bitwarden/clients/releases/download/desktop-v2024.12.1/Bitwarden-2024.12.1-amd64.deb
 
 # Jeux

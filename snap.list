@@ -19,7 +19,7 @@ del:gnome-boxes
 
 # Mots de passe
 ## suppression de bitwarden car installation en Appimage
-del:bitwarden
+#add:bitwarden
 
 # Utilitaire
 ## suppression de gnome-calendar car installation en .deb
