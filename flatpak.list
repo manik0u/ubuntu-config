@@ -25,6 +25,11 @@ add:com.github.hugolabe.Wike
 add:org.gnome.Weather
 add:org.gnome.SimpleScan
 add:org.gnome.SoundRecorder
+add:it.mijorus.gearlever
+io.gitlab.adhami3310.Impression
+
+# Bureautique
+org.onlyoffice.desktopeditors
 
 # Fun
 add:io.gitlab.gregorni.Letterpress
@@ -36,5 +41,11 @@ add:com.cassidyjames.butler
 # Jeux
 add:com.valvesoftware.Steam
 add:org.gnome.TwentyFortyEight
+
+# Finances
+fr.free.Homebank
+
+# Communication
+im.riot.Riot
 
 ## Fin de liste ##
