@@ -2,21 +2,11 @@
 #add:URL_localdebpackagename - l'URL doit être le lien direct vers le fichier *.deb
 #del:URL_localdebpackagename - l'URL doit être le lien direct vers le fichier *.deb
 
-# Cloud
-#add:
-
 # ProtonMail
 del:https://proton.me/download/mail/linux/ProtonMail-desktop-beta.deb
 add:https://proton.me/download/mail/linux/ProtonMail-desktop-beta.deb
 
 # Mots de passe
-#del:https://github.com/bitwarden/clients/releases/download/desktop-v2024.12.1/Bitwarden-2024.12.1-amd64.deb
 add:https://github.com/bitwarden/clients/releases/download/desktop-v2025.2.1/Bitwarden-2025.2.1-amd64.deb
-
-# Jeux
-#del:https://cdn.akamai.steamstatic.com/client/installer/steam.deb
-
-# Multimedia
-#del:https://github.com/MediaBrowser/emby-theater-electron/releases/download/3.0.21/emby-theater-deb_3.0.21_amd64.deb
 
 ## Fin de liste ##
