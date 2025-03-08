@@ -27,13 +27,13 @@ add:gsettings set org.gnome.desktop.peripherals.touchpad click-method "areas"
 # Désactivation des sons système
 add:gsettings set org.gnome.desktop.wm.preferences audible-bell false
 
-# Activation du mode nuit
+# Activation du mode nuit (mode sepia anti lumière bleu)
 add:gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled false
 
 # Epuration des fichiers temporaires et de la corbeille de plus de 30 jours
 add:gsettings set org.gnome.desktop.privacy remove-old-temp-files true
 add:gsettings set org.gnome.desktop.privacy remove-old-trash-files true
-add:gsettings set org.gnome.desktop.privacy old-files-age "30"
+##add:gsettings set org.gnome.desktop.privacy old-files-age "uint32 30"
 
 ## Confidentialité de GNOME
 # Désactivation de l'envoi des rapports
@@ -43,15 +43,15 @@ add:gsettings set org.gnome.desktop.privacy send-software-usage-stats false
 
 ## Personnalisation de GNOME
 # Application du thème sombre
-add:gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
-add:gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark'
+##add:gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
+add:gsettings set org.gnome.desktop.interface gtk-theme "adw-gtk3-dark"
 
 ## Configuration Nautilus
 # Désactivation de l ouverture du dossier lorsqu un élément est glissé dedans
 add:gsettings set org.gnome.nautilus.preferences open-folder-on-dnd-hover false
 
 # Activation du double clic
-add:gsettings set org.gnome.nautilus.preferences click-policy 'double'
+add:gsettings set org.gnome.nautilus.preferences click-policy "double"
 
 # Modification de l ordre de tri
 add:gsettings set org.gtk.Settings.FileChooser sort-directories-first true
@@ -71,7 +71,7 @@ add:gsettings set org.gnome.TextEditor show-line-numbers true
 
 ## Configuration de GNOME Web
 # add:gsettings set org.gnome.Epiphany ask-for-default false
-# add:gsettings set org.gnome.Epiphany homepage-url 'about:blank'
+# add:gsettings set org.gnome.Epiphany homepage-url "about:blank"
 # add:gsettings set org.gnome.Epiphany start-in-incognito-mode true
 
 ## Personnalisation de Dash-to-dock"
@@ -90,7 +90,8 @@ add:gsettings set org.gnome.shell.extensions.dash-to-dock disable-overview-on-st
 
 ## Activation de l'ouverture des applications en premier plan
 gsettings set org.gnome.desktop.wm.preferences auto-raise 'true'
-gsettings set org.gnome.desktop.wm.preferences focus-new-windows 'strict'
+#gsettings set org.gnome.desktop.wm.preferences focus-new-windows "strict"
+gsettings set org.gnome.desktop.wm.preferences focus-new-windows "smart"
 
 ## Mise en place des paramètres de clavier FR - Verr num
 gsettings set org.gnome.desktop.input-sources xkb-options "['caps:shiftlock']"
