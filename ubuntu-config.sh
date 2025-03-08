@@ -155,9 +155,12 @@ function dl_localdeb() {
 	sudo wget -nd -nc -q -P "$REP_LOCALDEBS" "$1" >> "$LOGFILE" 2>&1
 }
 
-function del_localdeb() {
-	
+function del_localdeb_pkg() {
 	sudo apt remove "$1" -y -q=4 2>/dev/null | grep "Suppression" >> "$LOGFILE" 2>&1
+}
+
+function del_localdeb_file() {
+	echo "Suppression du fichier $1" >> "$LOGFILE" 2>&1
 	sudo find "$REP_LOCALDEBS/" -name "$1" -exec rm -rfv {} \; >> "$LOGFILE" 2>&1
 }
 
@@ -468,7 +471,8 @@ do
 		if check_localdeb "$app"; then
 			echo -n "- - - Suppression paquet local $package_name (fichier $app) via l'url $url : "
 			echo -e "\n- - - Suppression paquet local $package_name (fichier $app) via l'url $url : "  >> "$LOGFILE"  2>&1
-			del_localdeb "$package_name"
+			del_localdeb_pkg "$package_name"
+			del_localdeb_file "$app"
 			check_cmd
 		fi
 	fi
