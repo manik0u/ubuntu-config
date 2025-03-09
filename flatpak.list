@@ -25,10 +25,11 @@ add:org.gnome.Weather
 add:org.gnome.SimpleScan
 add:org.gnome.SoundRecorder
 add:it.mijorus.gearlever
-io.gitlab.adhami3310.Impression
+add:io.gitlab.adhami3310.Impression
+add:org.remmina.Remmina
 
 # Bureautique
-org.onlyoffice.desktopeditors
+add:org.onlyoffice.desktopeditors
 
 # Fun
 add:io.gitlab.gregorni.Letterpress
