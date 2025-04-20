@@ -13,7 +13,7 @@ add:io.github.ungoogled_software.ungoogled_chromium
 add:io.gitlab.librewolf-community
 
 # Utilitaires
-add:com.usebottles.bottles
+del:com.usebottles.bottles
 add:com.github.tchx84.Flatseal
 add:org.gnome.World.PikaBackup
 #add:com.mattjakeman.ExtensionManager

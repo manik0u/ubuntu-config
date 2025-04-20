@@ -16,7 +16,7 @@ add:gnome-tweaks
 add:gnome-backgrounds
 add:gnome-screensaver
 add:gnome-screensaver-flags
-add:gnome-boxes
+del:gnome-boxes
 
 # Console
 add:nala

@@ -401,8 +401,8 @@ fi
 ## DISPLAYPORT DRIVERS
 if ! check_repo_file synaptics.list; then
 	echo -n "- - - Installation Synaptics Repo (Display ports drivers): "
-	sudo wget -O  ./Téléchargements/synaptics-repository-keyring.deb https://www.synaptics.com/sites/default/files/Ubuntu/pool/stable/main/all/synaptics-repository-keyring.deb  >> "$LOGFILE"  2>&1
-	sudo apt -y install ./Téléchargements/synaptics-repository-keyring.deb -q=2 >> "$LOGFILE"  2>&1
+	sudo wget -O  $HOME/Téléchargements/synaptics-repository-keyring.deb https://www.synaptics.com/sites/default/files/Ubuntu/pool/stable/main/all/synaptics-repository-keyring.deb  >> "$LOGFILE"  2>&1
+	sudo apt -y install $HOME/Téléchargements/synaptics-repository-keyring.deb -q=2 >> "$LOGFILE"  2>&1
 	check_cmd
 fi
 
