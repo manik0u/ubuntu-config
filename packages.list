@@ -34,8 +34,9 @@ add:telnet
 
 # Divers
 add:git
-add:displaylink-driver
+del:displaylink-driver
 add:solaar
+add:nextcloud-client
 
 # Internet
 ## désintallation du package Firefox de base (snap) sur Ubuntu

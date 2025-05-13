@@ -376,10 +376,17 @@ check_cmd
 ## SOLAAR
 echo -n "- - - Installation repo SOLAAR : "
 echo -e "\n- - - Installation repo SOLAAR : "  >> "$LOGFILE"  2>&1
-sudo add-apt-repository -y ppa:solaar-unifying/stable | grep "sources" >> "$LOGFILE"  2>&1
+sudo add-apt-repository -y ppa:solaar-unifying/stable | grep "URIs" >> "$LOGFILE"  2>&1
+check_cmd
+
+## NEXTCLOUD Desktop
+echo -n "- - - Installation repo Nextcloud Desktop : "
+echo -e "\n- - - Installation repo Nextcloud Desktop : "  >> "$LOGFILE"  2>&1
+sudo add-apt-repository -y ppa:nextcloud-devs/client | grep "URIs" >> "$LOGFILE"  2>&1
 check_cmd
 
 ## MOZILLA
+echo -n "- - - Vérification Mozilla Repo : "
 if ! check_repo_file mozilla.list; then
 	echo -n "- - - Installation Mozilla Repo : "
 	sudo apt install wget -y -q=2 >> "$LOGFILE"  2>&1

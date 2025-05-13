@@ -4,7 +4,7 @@
 
 # Cloud
 del:https://github.com/nextcloud-releases/desktop/releases/download/v3.15.3/Nextcloud-3.15.3-x86_64.AppImage
-add:https://github.com/nextcloud-releases/desktop/releases/download/v3.16.0/Nextcloud-3.16.0-x86_64.AppImage
+del:https://github.com/nextcloud-releases/desktop/releases/download/v3.16.0/Nextcloud-3.16.0-x86_64.AppImage
 
 # La gestion des Appimages peut se faire via le package flatpak "Levier de vitesse (it.mijorus.gearlever)" : pour l'utiliser il faut télécharger les appimages et les ajouter à l'application "Levier" 
 
